@@ -105,13 +105,12 @@ Frontend `.env`:
 VITE_API_URL=http://localhost:5000/api
 ```
 
-## Demo Credentials
+## Credentials
 
-All seeded accounts use `Password@123`.
 
-- Admin: `admin@example.com`
-- Member: `member@example.com`
-- Member: `jordan@example.com`
+- Admin: `shalubhardwaj7@gmail.com`     and  Password: `Shalu@1234`
+- Member: `harshsharma19@gmail.com`     and  Password: `Harsh@1234`
+- Member: `prisha9@gmail.com`           and  Password: `Prisha!234`
 
 ## API Documentation
 
