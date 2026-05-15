@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CalendarDays, Edit, Plus, Trash2, Users, X } from 'lucide-react';
+import { CalendarDays, Edit, Hash, Plus, Trash2, Users, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Avatar from '../components/Avatar';
 import Badge from '../components/Badge';
@@ -103,12 +103,15 @@ const Projects = () => {
           const total = project.tasks.length;
           const completed = project.tasks.filter((task) => task.status === 'Completed').length;
           const progress = total ? Math.round((completed / total) * 100) : 0;
+          // Deduplicate members by id
           const members = [...new Map(project.tasks.map((task) => [task.assignee.id, task.assignee])).values()];
           const deadline = project.tasks.map((task) => new Date(task.dueDate)).sort((a, b) => a - b)[0];
 
           return (
             <motion.div key={project.id} className="panel card-hover relative overflow-hidden p-5" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.04 }}>
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/60 to-transparent" />
+
+              {/* Header */}
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <Badge tone={progress === 100 ? 'green' : 'blue'}>{progress === 100 ? 'Complete' : 'Active'}</Badge>
@@ -123,6 +126,7 @@ const Projects = () => {
                 ) : null}
               </div>
 
+              {/* Progress bar */}
               <div className="mt-6">
                 <div className="mb-2 flex justify-between text-sm font-bold"><span>Progress</span><span>{progress}%</span></div>
                 <div className="h-3 overflow-hidden rounded-full bg-slate-800">
@@ -130,6 +134,7 @@ const Projects = () => {
                 </div>
               </div>
 
+              {/* Stats */}
               <div className="mt-5 grid grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                   <p className="text-xs font-bold uppercase text-slate-400">Tasks</p>
@@ -141,20 +146,44 @@ const Projects = () => {
                 </div>
               </div>
 
+              {/* Deadline & member count */}
               <div className="mt-5 flex items-center justify-between gap-3 text-sm text-slate-400">
                 <div className="flex items-center gap-2"><CalendarDays className="h-4 w-4" />{deadline ? formatDate(deadline) : formatDate(project.createdAt)}</div>
-                <div className="flex items-center gap-2"><Users className="h-4 w-4" />{members.length || 1}</div>
+                <div className="flex items-center gap-2"><Users className="h-4 w-4" />{members.length || 1} member{members.length !== 1 ? 's' : ''}</div>
               </div>
 
-              <div className="mt-5 flex items-center justify-between">
-                <div className="flex -space-x-2">
-                  {(members.length ? members : [project.creator]).slice(0, 4).map((member) => <Avatar key={member.id} name={member.name} className="h-9 w-9 text-xs ring-2 ring-slate-950" />)}
+              {/* Members with ID badges */}
+              <div className="mt-5">
+                <p className="text-xs font-bold uppercase text-slate-500 mb-2">Team members</p>
+                <div className="flex flex-col gap-2">
+                  {(members.length ? members : [project.creator]).map((member) => (
+                    <div
+                      key={member.id}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2"
+                      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--ink-border)' }}
+                    >
+                      <Avatar name={member.name} className="h-8 w-8 text-xs shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold truncate">{member.name}</p>
+                        <p className="text-xs text-slate-500 truncate">{member.email}</p>
+                      </div>
+                      {/* Member ID badge */}
+                      <span
+                        className="shrink-0 flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-black"
+                        style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', color: 'var(--gold)', fontFamily: "'DM Mono', monospace" }}
+                      >
+                        <Hash className="h-3 w-3" />
+                        {member.id}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-xs font-bold text-slate-400">Owner {project.creator.name}</p>
               </div>
 
+              {/* Recent tasks */}
               {project.tasks.length ? (
                 <div className="mt-5 space-y-2">
+                  <p className="text-xs font-bold uppercase text-slate-500 mb-2">Recent tasks</p>
                   {project.tasks.slice(0, 2).map((task) => (
                     <div key={task.id} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2">
                       <span className="truncate text-sm font-bold">{task.title}</span>
@@ -163,6 +192,9 @@ const Projects = () => {
                   ))}
                 </div>
               ) : null}
+
+              {/* Owner */}
+              <p className="mt-4 text-xs font-bold text-slate-400">Owner: {project.creator.name}</p>
             </motion.div>
           );
         })}

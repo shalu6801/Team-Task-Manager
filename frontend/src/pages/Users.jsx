@@ -34,11 +34,30 @@ const Users = () => {
                     <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-slate-950 bg-emerald-500" />
                   </div>
                   <div className="min-w-0">
-                    <h2 className="text-lg font-black">{user.name}</h2>
-                    <p className="mt-1 flex min-w-0 items-center gap-1 text-sm font-medium text-slate-400"><Mail className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">{user.email}</span></p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h2 className="text-lg font-black">{user.name}</h2>
+                      {/* Member ID badge */}
+                      <span
+                        className="inline-flex items-center gap-1 rounded-lg px-2 py-0.5 text-xs font-black"
+                        style={{
+                          background: 'rgba(201,168,76,0.1)',
+                          border: '1px solid rgba(201,168,76,0.25)',
+                          color: 'var(--gold)',
+                          fontFamily: "'DM Mono', monospace",
+                        }}
+                      >
+                        ID {user.id}
+                      </span>
+                    </div>
+                    <p className="mt-1 flex min-w-0 items-center gap-1 text-sm font-medium text-slate-400">
+                      <Mail className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{user.email}</span>
+                    </p>
                   </div>
                 </div>
-                <Badge tone={user.role === 'Admin' ? 'blue' : 'slate'}><Shield className="mr-1 h-3 w-3" />{user.role}</Badge>
+                <Badge tone={user.role === 'Admin' ? 'blue' : 'slate'}>
+                  <Shield className="mr-1 h-3 w-3" />{user.role}
+                </Badge>
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-3">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, LogIn } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Eye, EyeOff, LogIn } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { apiError } from '../utils/format';
@@ -64,16 +64,42 @@ export const AuthShell = ({ title, subtitle, children }) => (
   </div>
 );
 
-export const FloatingInput = ({ label, type = 'text', value, onChange, children }) => (
+export const FloatingInput = ({ label, type = 'text', value, onChange, children, showToggle, onToggle, isVisible }) => (
   <div>
     <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--text-3)', letterSpacing: '0.04em' }}>{label}</label>
-    {children || <input className="form-input" type={type} required value={value} onChange={e => onChange(e.target.value)} />}
+    {children || (
+      <div className="relative">
+        <input
+          className="form-input"
+          style={{ paddingRight: showToggle ? '2.75rem' : undefined }}
+          type={showToggle ? (isVisible ? 'text' : 'password') : type}
+          required
+          value={value}
+          onChange={e => onChange(e.target.value)}
+        />
+        {showToggle && (
+          <button
+            type="button"
+            onClick={onToggle}
+            className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+            style={{ color: 'var(--text-muted)', lineHeight: 0 }}
+            aria-label={isVisible ? 'Hide password' : 'Show password'}
+          >
+            {isVisible
+              ? <EyeOff className="h-4 w-4" style={{ color: 'var(--gold)' }} />
+              : <Eye className="h-4 w-4" />
+            }
+          </button>
+        )}
+      </div>
+    )}
   </div>
 );
 
 const Login = () => {
   const { user, login, loading } = useAuth();
   const [values, setValues] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   if (user) return <Navigate to="/" replace />;
@@ -87,8 +113,50 @@ const Login = () => {
   return (
     <AuthShell title="Welcome back" subtitle="Sign in to access your workspace.">
       <form className="space-y-4" onSubmit={submit}>
-        <FloatingInput label="Email address" type="email" value={values.email} onChange={email => setValues({ ...values, email })} />
-        <FloatingInput label="Password" type="password" value={values.password} onChange={password => setValues({ ...values, password })} />
+        <FloatingInput
+          label="Email address"
+          type="email"
+          value={values.email}
+          onChange={email => setValues({ ...values, email })}
+        />
+        <div>
+          <FloatingInput
+            label="Password"
+            type="password"
+            value={values.password}
+            onChange={password => setValues({ ...values, password })}
+            showToggle
+            isVisible={showPassword}
+            onToggle={() => setShowPassword(v => !v)}
+          />
+          {/* Static password hint */}
+          <div style={{
+            marginTop: '0.5rem',
+            padding: '0.65rem 0.85rem',
+            borderRadius: '0.6rem',
+            background: 'rgba(201,168,76,0.06)',
+            border: '1px solid rgba(201,168,76,0.15)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.4rem 0.75rem',
+          }}>
+            <span style={{ width: '100%', fontSize: '0.65rem', fontFamily: "'DM Mono', monospace", letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.1rem' }}>
+              Password must include
+            </span>
+            {[
+              '8+ characters',
+              'one Uppercase (A–Z)',
+              'one Lowercase (a–z)',
+              'Number (0–9)',
+              'Symbol (!@#$…)',
+            ].map(hint => (
+              <span key={hint} style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--gold-dim)', display: 'inline-block', flexShrink: 0 }} />
+                {hint}
+              </span>
+            ))}
+          </div>
+        </div>
         <button className="btn-primary w-full mt-2" disabled={loading}>
           <LogIn className="h-4 w-4" />
           {loading ? 'Signing in…' : 'Sign in'}
@@ -99,9 +167,6 @@ const Login = () => {
           <Link className="font-semibold hover:underline" style={{ color: 'var(--gold-light)' }} to="/signup">Create one</Link>
         </p>
       </form>
-      <div className="mt-6 rounded-xl p-4 text-sm" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
-        
-      </div>
     </AuthShell>
   );
 };
