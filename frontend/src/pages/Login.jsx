@@ -119,44 +119,15 @@ const Login = () => {
           value={values.email}
           onChange={email => setValues({ ...values, email })}
         />
-        <div>
-          <FloatingInput
-            label="Password"
-            type="password"
-            value={values.password}
-            onChange={password => setValues({ ...values, password })}
-            showToggle
-            isVisible={showPassword}
-            onToggle={() => setShowPassword(v => !v)}
-          />
-          {/* Static password hint */}
-          <div style={{
-            marginTop: '0.5rem',
-            padding: '0.65rem 0.85rem',
-            borderRadius: '0.6rem',
-            background: 'rgba(201,168,76,0.06)',
-            border: '1px solid rgba(201,168,76,0.15)',
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.4rem 0.75rem',
-          }}>
-            <span style={{ width: '100%', fontSize: '0.65rem', fontFamily: "'DM Mono', monospace", letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.1rem' }}>
-              Password must include
-            </span>
-            {[
-              '8+ characters',
-              'one Uppercase (A–Z)',
-              'one Lowercase (a–z)',
-              'Number (0–9)',
-              'Symbol (!@#$…)',
-            ].map(hint => (
-              <span key={hint} style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--gold-dim)', display: 'inline-block', flexShrink: 0 }} />
-                {hint}
-              </span>
-            ))}
-          </div>
-        </div>
+        <FloatingInput
+          label="Password"
+          type="password"
+          value={values.password}
+          onChange={password => setValues({ ...values, password })}
+          showToggle
+          isVisible={showPassword}
+          onToggle={() => setShowPassword(v => !v)}
+        />
         <button className="btn-primary w-full mt-2" disabled={loading}>
           <LogIn className="h-4 w-4" />
           {loading ? 'Signing in…' : 'Sign in'}
