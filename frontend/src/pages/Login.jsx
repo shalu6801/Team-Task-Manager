@@ -111,7 +111,7 @@ const Login = () => {
   };
 
   return (
-    <AuthShell title="Welcome back" subtitle="Sign in to access your workspace.">
+    <AuthShell title="Welcome" subtitle="Sign in to access your workspace.">
       <form className="space-y-4" onSubmit={submit}>
         <FloatingInput
           label="Email address"
