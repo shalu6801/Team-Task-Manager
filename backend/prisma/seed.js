@@ -13,18 +13,18 @@ async function main() {
   await prisma.project.deleteMany();
   await prisma.user.deleteMany();
 
-  const password = await bcrypt.hash('Password@123', 12);
+  const password = await bcrypt.hash('Shalu@1234', 12);
 
   const admin = await prisma.user.create({
-    data: { name: 'Avery Admin', email: 'admin@example.com', password, role: 'Admin' }
+    data: { name: 'Shalu', email: 'shalubhardwaj7@gmail.com', password, role: 'Admin' }
   });
 
   const maya = await prisma.user.create({
-    data: { name: 'Maya Member', email: 'member@example.com', password, role: 'Member' }
+    data: { name: 'Harsh', email: 'harshsharma19@gmail.com', password, role: 'Member' }
   });
 
   const jordan = await prisma.user.create({
-    data: { name: 'Jordan Lee', email: 'jordan@example.com', password, role: 'Member' }
+    data: { name: 'Prisha', email: 'prisha9@gmail.com', password, role: 'Member' }
   });
 
   const launch = await prisma.project.create({
