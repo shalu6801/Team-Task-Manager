@@ -14,7 +14,6 @@ async function main() {
   await prisma.user.deleteMany();
 
   const password = await bcrypt.hash('Shalu@1234', 12);
-  const memberPassword = await bcrypt.hash('MemberPass@456', 12);
   const harshPassword = await bcrypt.hash('Harsh@1234', 12);
   const prishaPassword = await bcrypt.hash('Prisha!234', 12);
 
@@ -22,12 +21,12 @@ async function main() {
     data: { name: 'Shalu', email: 'shalubhardwaj7@gmail.com', password, role: 'Admin' }
   });
 
-  const maya = await prisma.user.create({
-    data: { name: 'Harsh', email: 'harshsharma19@gmail.com', password, role: 'Member' }
+  const harsh = await prisma.user.create({
+    data: { name: 'Harsh', email: 'harshsharma19@gmail.com', password: harshPassword, role: 'Member' }
   });
 
-  const jordan = await prisma.user.create({
-    data: { name: 'Prisha', email: 'prisha9@gmail.com', password, role: 'Member' }
+  const prisha = await prisma.user.create({
+    data: { name: 'Prisha', email: 'prisha9@gmail.com', password: prishaPassword, role: 'Member' }
   });
 
   const launch = await prisma.project.create({
@@ -54,7 +53,7 @@ async function main() {
         status: 'InProgress',
         priority: 'High',
         dueDate: futureDate(3),
-        assignedTo: maya.id,
+        assignedTo: harsh.id,
         projectId: launch.id,
         createdBy: admin.id
       },
@@ -64,7 +63,7 @@ async function main() {
         status: 'Pending',
         priority: 'Medium',
         dueDate: futureDate(7),
-        assignedTo: jordan.id,
+        assignedTo: prisha.id,
         projectId: launch.id,
         createdBy: admin.id
       },
@@ -74,7 +73,7 @@ async function main() {
         status: 'Completed',
         priority: 'Low',
         dueDate: futureDate(-2),
-        assignedTo: maya.id,
+        assignedTo: harsh.id,
         projectId: ops.id,
         createdBy: admin.id
       },
@@ -84,7 +83,7 @@ async function main() {
         status: 'Overdue',
         priority: 'High',
         dueDate: futureDate(-1),
-        assignedTo: jordan.id,
+        assignedTo: prisha.id,
         projectId: ops.id,
         createdBy: admin.id
       }
