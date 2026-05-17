@@ -170,3 +170,5 @@ npm run seed
 
 The backend serves `frontend/dist` in production, so one Railway service can host the full app.
 
+# PROJECT DEMONSTARTION VIDEO LINK:  
+https://drive.google.com/file/d/1G4hXH4N6auEDjGuNGAJLLtAcN41xQbmG/view?usp=sharing
